@@ -1,0 +1,18 @@
+{
+  "metadata": {
+    "last_run": "2026-04-11T16:08:11.793451+00:00",
+    "health": "AMBER",
+    "kenya_ratio": "38.2%",
+    "signal_density": 1
+  },
+  "top_stories": [
+    {
+      "id": "b91892b4-32b2-4ad6-90b7-008b817043d7",
+      "title": "M-KOPA unlocks $22.5 million in credit in South Africa as women drive uptake",
+      "url": "https://techcabal.com/2026/04/09/m-kopa-impact-report/",
+      "signal_score": 9,
+      "classification_v1": "capital",
+      "published_at": "2026-04-09T16:12:21+00:00"
+    }
+  ]
+}

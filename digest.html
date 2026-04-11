@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NairobiSignal Weekly Digest</title>
+  <style>
+    :root {
+      --bg: #0a0a0a;
+      --surface: #121212;
+      --surface-2: #1a1a1a;
+      --border: #2a2a2a;
+      --t1: #e0e0e0;
+      --t2: #9e9e9e;
+      --t3: #616161;
+      --mono: 'JetBrains Mono', 'Fira Code', monospace;
+      --green: #00e676;
+      --amber: #ffab40;
+      --red: #ff5252;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--t1);
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 24px 16px;
+    }
+
+    .digest-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 32px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .dh-left h1 {
+      font-size: 20px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      margin-bottom: 4px;
+    }
+
+    .dh-left h1 span {
+      color: var(--green);
+    }
+
+    .dh-sub {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--t3);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .dh-date {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--t3);
+      text-align: right;
+    }
+
+    .kpi-row {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+
+    .kpi {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 12px 16px;
+      flex: 1;
+    }
+
+    .kpi-label {
+      font-family: var(--mono);
+      font-size: 9px;
+      color: var(--t3);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 4px;
+    }
+
+    .kpi-value {
+      font-size: 24px;
+      font-weight: 600;
+    }
+
+    .kpi-kenya { color: var(--green); }
+    .kpi-health { color: var(--t1); }
+
+    .chip-green {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--green);
+      border: 1px solid rgba(0, 230, 118, 0.2);
+      border-radius: 4px;
+      padding: 4px 8px;
+      display: inline-block;
+    }
+
+    .section-label {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--t3);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .section-label-signals span {
+      color: var(--t2);
+      font-weight: 400;
+    }
+
+    .signal-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+
+    .signal {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px;
+      display: flex;
+      gap: 16px;
+      transition: border-color 0.2s ease;
+    }
+
+    .signal:hover {
+      border-color: var(--t3);
+    }
+
+    .sig-score {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-width: 48px;
+    }
+
+    .ss-num {
+      font-size: 28px;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .ss-label {
+      font-family: var(--mono);
+      font-size: 8px;
+      color: var(--t3);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-top: 2px;
+    }
+
+    .sig-body {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .sb-title {
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 1.4;
+      margin-bottom: 8px;
+      color: var(--t1);
+    }
+
+    .sb-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .sb-tag {
+      font-family: var(--mono);
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 2px 6px;
+      border-radius: 3px;
+      border: 1px solid;
+    }
+
+    .sb-age {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--t3);
+    }
+
+    .sb-source {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--t3);
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    .sb-source:hover {
+      color: var(--t1);
+    }
+
+    .sectors-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+
+    .sector-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 12px;
+    }
+
+    .sector-name {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--t2);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 8px;
+    }
+
+    .sector-bar {
+      height: 4px;
+      background: var(--surface-2);
+      border-radius: 2px;
+      overflow: hidden;
+      margin-bottom: 6px;
+    }
+
+    .sr-bar {
+      height: 100%;
+      background: var(--green);
+      border-radius: 2px;
+      width: 0;
+      transition: width 0.6s ease;
+    }
+
+    .sector-pct {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--t1);
+    }
+
+    .pipeline-section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 32px;
+    }
+
+    .pipeline-header {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--t3);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 12px;
+    }
+
+    .fc-row {
+      display: flex;
+      gap: 4px;
+      height: 8px;
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 8px;
+    }
+
+    .fc-bar {
+      height: 100%;
+      transition: width 0.6s ease;
+    }
+
+    #fc-cap { background: var(--green); }
+    #fc-pol { background: var(--amber); }
+
+    .fc-legend {
+      display: flex;
+      gap: 16px;
+      font-family: var(--mono);
+      font-size: 9px;
+      color: var(--t3);
+    }
+
+    .fc-legend span {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .fc-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+
+    .error-state {
+      background: rgba(255, 82, 82, 0.1);
+      border: 1px solid rgba(255, 82, 82, 0.3);
+      border-radius: 8px;
+      padding: 24px;
+      text-align: center;
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--red);
+    }
+
+    @media (max-width: 640px) {
+      .sectors-grid {
+        grid-template-columns: 1fr;
+      }
+      .digest-header {
+        flex-direction: column;
+        gap: 8px;
+      }
+      .dh-date {
+        text-align: left;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header class="digest-header">
+      <div class="dh-left">
+        <h1>Nairobi<span>Signal</span> Weekly Digest</h1>
+        <div class="dh-sub">Structural thermodynamics of the Kenyan tech ecosystem</div>
+      </div>
+      <div class="dh-right">
+        <div class="dh-date">Generated --</div>
+      </div>
+    </header>
+
+    <div class="kpi-row">
+      <div class="kpi">
+        <div class="kpi-label">Kenya Signal Ratio</div>
+        <div class="kpi-value kpi-kenya">--</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">Pipeline Health</div>
+        <div class="kpi-value kpi-health">
+          <span class="chip-green">● Pipeline GREEN</span>
+        </div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">Signal Density</div>
+        <div class="kpi-value" id="signal-density">--</div>
+      </div>
+    </div>
+
+    <section class="section-label section-label-signals">
+      Top Signals <span></span>
+    </section>
+
+    <div id="signal-list" class="signal-list">
+      <div class="error-state">Loading...</div>
+    </div>
+
+    <section class="section-label">Sector Distribution</section>
+    <div class="sectors-grid">
+      <div class="sector-card">
+        <div class="sector-name">FinTech</div>
+        <div class="sector-bar"><div class="sr-bar" data-pct="41"></div></div>
+        <div class="sector-pct">41%</div>
+      </div>
+      <div class="sector-card">
+        <div class="sector-name">Policy</div>
+        <div class="sector-bar"><div class="sr-bar" data-pct="24"></div></div>
+        <div class="sector-pct">24%</div>
+      </div>
+      <div class="sector-card">
+        <div class="sector-name">Startup</div>
+        <div class="sector-bar"><div class="sr-bar" data-pct="28"></div></div>
+        <div class="sector-pct">28%</div>
+      </div>
+    </div>
+
+    <div class="pipeline-section">
+      <div class="pipeline-header">Capital vs Policy Split</div>
+      <div class="fc-row">
+        <div id="fc-cap" class="fc-bar" style="width: 0"></div>
+        <div id="fc-pol" class="fc-bar" style="width: 0"></div>
+      </div>
+      <div class="fc-legend">
+        <span><div class="fc-dot" style="background: var(--green)"></div>Capital</span>
+        <span><div class="fc-dot" style="background: var(--amber)"></div>Policy</span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const JSON_PATH = '_data/weekly_signal.json';
+
+    const SECTOR_COLORS = {
+      capital: '#64ffda',
+      fintech: '#64ffda',
+      policy: '#ff5252',
+      ai: '#ce93d8',
+      telecom: '#90caf9',
+      startup: '#40c4ff',
+      healthtech: '#546e7a',
+      general: '#3d4f5f',
+    };
+
+    function formatAge(isoString) {
+      if (!isoString) return '';
+      const diffH = Math.round((Date.now() - new Date(isoString)) / 36e5);
+      if (diffH < 24) return `${diffH}h ago`;
+      return `${Math.floor(diffH / 24)}d ago`;
+    }
+
+    function renderFetchError(err) {
+      const list = document.getElementById('signal-list');
+      list.innerHTML = `<div class="error-state">Failed to load data: ${err.message}</div>`;
+    }
+
+    function updateMetadata(meta) {
+      const healthEl = document.querySelector('.chip-green');
+      if (meta.health !== 'GREEN') {
+        healthEl.textContent = `● Pipeline ${meta.health}`;
+        healthEl.style.color = meta.health === 'AMBER' ? 'var(--amber)' : 'var(--red)';
+        healthEl.style.borderColor = meta.health === 'AMBER' ? 'rgba(255,171,64,.2)' : 'rgba(255,82,82,.2)';
+      }
+
+      document.querySelector('.kpi-kenya').textContent = meta.kenya_ratio;
+      document.getElementById('signal-density').textContent = meta.signal_density;
+
+      const ts = new Date(meta.last_run);
+      document.querySelector('.dh-date').textContent = `Generated ${ts.toUTCString().slice(0,16)} · ${ts.toISOString().slice(11,16)} UTC`;
+
+      if (meta.signal_density < 3) {
+        document.querySelector('.section-label-signals span').textContent = `${meta.signal_density} high-signal article${meta.signal_density === 1 ? '' : 's'} this week`;
+      }
+    }
+
+    function buildSignals(stories) {
+      const list = document.getElementById('signal-list');
+      list.innerHTML = '';
+
+      if (!stories || stories.length === 0) {
+        list.innerHTML = `<div class="error-state">No signals above threshold this week.</div>`;
+        return;
+      }
+
+      stories.forEach(s => {
+        const scoreCol = s.signal_score >= 8.5 ? '#00e676' : s.signal_score >= 6 ? '#ffab40' : '#40c4ff';
+        const sectorColor = SECTOR_COLORS[s.classification_v1] || '#546e7a';
+        const card = document.createElement('div');
+        card.className = 'signal';
+        card.innerHTML = `
+          <div class="sig-score">
+            <div class="ss-num" style="color:${scoreCol}">${s.signal_score}</div>
+            <div class="ss-label">SIG</div>
+          </div>
+          <div class="sig-body">
+            <div class="sb-title">${s.title}</div>
+            <div class="sb-meta">
+              <span class="sb-tag" style="color:${sectorColor}; border-color:${sectorColor}aa">${s.classification_v1.toUpperCase()}</span>
+              <span class="sb-age">${formatAge(s.published_at)}</span>
+              ${s.url ? `<a href="${s.url}" class="sb-source" target="_blank" rel="noopener">↗ source</a>` : ''}
+            </div>
+          </div>
+        `;
+        list.appendChild(card);
+      });
+    }
+
+    function buildSectors() {
+      // Hardcoded for now - next phase
+    }
+
+    function buildPipeline(health) {
+      // Capital vs Policy split visualization
+    }
+
+    function buildDots() {
+      // Additional UI elements
+    }
+
+    async function loadAndRender() {
+      let data;
+      try {
+        const res = await fetch(JSON_PATH);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        data = await res.json();
+      } catch (err) {
+        renderFetchError(err);
+        return;
+      }
+
+      updateMetadata(data.metadata);
+      buildSignals(data.top_stories);
+      buildSectors();
+      buildPipeline(data.metadata.health);
+      buildDots();
+
+      setTimeout(() => {
+        document.querySelectorAll('.sr-bar').forEach(b => b.style.width = b.dataset.pct + '%');
+        document.getElementById('fc-cap').style.width = '33%';
+        document.getElementById('fc-pol').style.width = '67%';
+      }, 200);
+    }
+
+    loadAndRender();
+  </script>
+</body>
+</html>
